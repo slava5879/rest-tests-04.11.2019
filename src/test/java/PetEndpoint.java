@@ -57,9 +57,9 @@ public class PetEndpoint {
                 .then();
     }
 
-    public ValidatableResponse updatePet(String body) {
+    public ValidatableResponse updatePet(Pet pet) {
         return given()
-                .body(body)
+                .body(pet)
                 .put(UPDATE_PET)
                 .then();
     }

@@ -53,7 +53,7 @@ public class PetTest {
         petEndPoint
                 .getPet(petId)
                 .statusCode(is(404))
-                .body("message", is ("data.Pet not found"));
+                .body("message", is ("Pet not found"));
     }
 
     @Test
@@ -68,27 +68,10 @@ public class PetTest {
     @Test
     public void UpdatePet () {
 
-        String body = "{\n" +
-                "  \"id\": " + petId + ",\n" +
-                "  \"category\": {\n" +
-                "    \"id\": 0,\n" +
-                "    \"name\": \"pets\"\n" +
-                "  },\n" +
-                "  \"name\": \"cat\",\n" +
-                "  \"photoUrls\": [\n" +
-                "    \"string\"\n" +
-                "  ],\n" +
-                "  \"tags\": [\n" +
-                "    {\n" +
-                "      \"id\": 0,\n" +
-                "      \"name\": \"string\"\n" +
-                "    }\n" +
-                "  ],\n" +
-                "  \"status\": \"done\"\n" +
-                "}";
+        Pet petToUpdate = new Pet(petId, "pets", "cat", "done1");
 
         petEndPoint
-                .updatePet(body)
+                .updatePet(petToUpdate)
                 .statusCode(200)
                 .body ("category.name", is ("pets"));
     }
