@@ -13,9 +13,9 @@ public class Pet {
     private String name;
     private List<String> photoUrls;
     private List<Tag> tags;
-    private String status;
+    private Status status;
 
-    public Pet(long id, String categoryName, String name, String status) {
+    public Pet(long id, String categoryName, String name, Status status) {
         this.id = id;
         this.category = new Category(0, categoryName);
         this.name = name;

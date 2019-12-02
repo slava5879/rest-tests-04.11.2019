@@ -1,14 +1,22 @@
 import data.Pet;
+import data.Status;
 import io.restassured.response.ValidatableResponse;
+import net.serenitybdd.junit.runners.SerenityRunner;
+import net.thucydides.core.annotations.Steps;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
-import static org.hamcrest.Matchers.anyOf;
+import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.Is.is;
 
+@RunWith(SerenityRunner.class)
 public class PetTest {
-    private PetEndpoint petEndPoint = new PetEndpoint();
-    private Pet pet = new Pet(0, "string", "cat", "done");
+//    private PetEndpoint petEndPoint = new PetEndpoint();
+
+    @Steps
+    private PetEndpoint petEndPoint;
+    private Pet pet = new Pet(0, "string", "cat", Status.pending);
     private static long petId;
 
 
@@ -16,7 +24,7 @@ public class PetTest {
     public void beforeMethod() {
 
         ValidatableResponse response = petEndPoint.createPet(pet)
-                .statusCode(anyOf(is(200), is(201)))
+                .statusCode(200)
                 .body("category.name", is("string"))
                 //.log().all()
         ;
@@ -30,7 +38,7 @@ public class PetTest {
 
         petEndPoint
                 .createPet(pet)
-                .statusCode(anyOf(is(200), is(201)))
+                .statusCode(200)
                 .body("category.name", is("string"));
     }
 
@@ -39,7 +47,7 @@ public class PetTest {
 
         petEndPoint
                 .getPet(petId)
-                .statusCode(is(200))
+                .statusCode(200)
                 .body("name", is ("cat"));
     }
 
@@ -60,24 +68,26 @@ public class PetTest {
     public void GetPetByStatus () {
 
         petEndPoint
-                .getPetByStatus("done")
+                .getPetByStatus(Status.pending)
                 .statusCode(is(200))
-                .body("status[0]", is("done"));
+                .body("status[]", everyItem(is(Status.pending.toString())));
     }
 
     @Test
     public void UpdatePet () {
 
-        Pet petToUpdate = new Pet(petId, "pets", "cat", "done1");
+        Pet petToUpdate = new Pet(petId, "pets", "catBasilio", Status.sold);
 
         petEndPoint
                 .updatePet(petToUpdate)
                 .statusCode(200)
-                .body ("category.name", is ("pets"));
+                .body ("category.name", is ("pets"))
+                .body("name", is("catBasilio"))
+                .body("status", is(Status.sold.toString()));
     }
 
     @Test
-    public void updatePetById () {
+    public void UpdatePetById () {
         petEndPoint
                 .updatePetById(petId, "catBasilio", "turned")
                 .statusCode(200);
@@ -87,5 +97,13 @@ public class PetTest {
                 .statusCode(200)
                 .body("name",is("catBasilio"))
                 .body("status", is ("turned"));
+    }
+
+    @Test
+    public void UploadPetImage () {
+        petEndPoint
+                .uploadPetImage(petId, "basilio.jpg") //src/test/resources/
+                .statusCode(200)
+                .body("message", containsString("basilio.jpg"));
     }
 }
