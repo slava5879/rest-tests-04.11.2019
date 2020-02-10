@@ -79,13 +79,6 @@
             <scope>test</scope>
         </dependency>
 
-        <!--for JavaObj to JSON serialisation-->
-        <!--<dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>2.9.10.1</version>
-        </dependency>-->
-
         <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-simple -->
         <!-- to enable serenity logging -->
         <dependency>

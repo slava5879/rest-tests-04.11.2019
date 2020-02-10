@@ -58,7 +58,7 @@ public class PetTest {
         petEndPoint
                 .getPet(petId)
                 .statusCode(200)
-                .body("name", is ("cat"));
+                .body("name", is ("Cat"));
     }
 
     @Test
